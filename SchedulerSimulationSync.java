@@ -127,8 +127,10 @@ class Process implements Runnable {
         // This ensures only allowed number of processes run simultaneously
         
         try {
-            if (startTime == -1) {
-                startTime = System.currentTimeMillis();
+    // Acquire CPU access
+    SharedResources.cpuSemaphore.acquire();
+            } catch (InterruptedException e) {
+               e.printStackTrace();
             }
             
             // Increment context switch counter
@@ -185,11 +187,13 @@ class Process implements Runnable {
             }
             System.out.println();
             
-        } finally {
+        }finally{
             // TODO #4: Release CPU semaphore here
             // Always release in finally block to prevent deadlocks!
-        }
-    }
+            SharedResources.cpuSemaphore.release();
+}
+        
+    
     
     private String createProgressBar(int progress, int width) {
         int filled = (progress * width) / 100;
