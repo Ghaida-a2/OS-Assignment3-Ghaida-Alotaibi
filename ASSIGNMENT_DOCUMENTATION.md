@@ -1,7 +1,7 @@
 # Assignment 3 - Complete Documentation
 
-**Student Name**: [Your Full Name]  
-**Student ID**: [Your ID]  
+**Student Name**: [Ghaida Alotaibi]  
+**Student ID**: [445052148]  
 **Date Submitted**: [Submission Date]
 
 ---
@@ -31,69 +31,69 @@
 
 Document your development process with **minimum 3 entries** showing progression:
 
-### Entry 1 - [Date, Time]
+### Entry 1 - [April 30, 10:00PM]
 **What I implemented**: 
-
+I began by comprehending the assignment specifications and examining the given code. I found shared resources that could result in a race issue, including counters and executionLog.
 **Challenges encountered**: 
-
+In a multithreaded setting, it was challenging to completely comprehend where racial circumstances could arise.
 **How I solved it**: 
-
+I went over the textbook's synchronization ideas and observed how several threads might access common variables.
 **Testing approach**: 
-
+I saw behavior by running the program without synchronization.
 **Time spent**: 
-
+30 min
 ---
 
-### Entry 2 - [Date, Time]
+### Entry 2 - [April 30, 10:30]
 **What I implemented**: 
-
+To safeguard shared counters (contextSwitchCount, completedProcessCount, totalWaitingTime), I built ReentrantLock.
 **Challenges encountered**: 
-
+Making sure locks are always released in order to prevent deadlocks
 **How I solved it**: 
-
+To ensure unlocking, I employed try-finally blocks.
 **Testing approach**: 
-
+To make sure counters update appropriately, several runs were tested.
 **Time spent**: 
-
+30 min
 ---
 
-### Entry 3 - [Date, Time]
+### Entry 3 - [April 30, 11:00]
 **What I implemented**: 
-
+I used the same lock to add synchronization to executionLog.
 **Challenges encountered**: 
-
+recognizing the reasons ArrayList is not thread-safe.
 **How I solved it**: 
-
+investigated concurrent collections and determined that locking was necessary.
 **Testing approach**: 
-
+ConcurrentModificationException was examined.
 **Time spent**: 
-
+30 min
 ---
 
-### Entry 4 - [Date, Time]
+### Entry 4 - [April 30, 11:30]
 **What I implemented**: 
-
+To manage CPU access, I put in place a semaphore.
 **Challenges encountered**: 
-
+knowing when to use the semaphore and when to release it.
 **How I solved it**: 
-
+placed release() in the end block and acquire() at the beginning.
 **Testing approach**: 
-
+made ensuring that only one process was running at a time and adhered to the execution order.
 **Time spent**: 
-
+30 min
 ---
 
-### Entry 5 - [Date, Time]
+### Entry 5 - [May 1, 12:00 AM]
 **What I implemented**: 
-
+final testing and preparation of the documentation.
 **Challenges encountered**: 
-
+maintaining uniformity throughout several runs.
 **How I solved it**: 
-
+ran the program several times and confirmed the outcomes.
 **Testing approach**: 
-
+executed several times and compared the results.
 **Time spent**: 
-
+1 hour
 ---
 
 ## Part 2: Technical Questions (1 mark)
@@ -106,7 +106,8 @@ Document your development process with **minimum 3 entries** showing progression
 
 **Your Answer**:
 
-[Your answer here - 4-6 sentences with code examples]
+[The original code contains two race situations. Initially, threads share and increment the contextSwitchCount variable without synchronization. Inaccurate counts could result from many threads reading the same value and overwriting each other's updates. 
+Second, several threads concurrently access the executionLog ArrayList. Concurrent updates could lead to incorrect data or runtime problems like ConcurrentModificationException since ArrayList is not thread-safe. These problems arise when shared resources are not protected by mutual exclusion.]
 
 ---
 
@@ -115,7 +116,7 @@ Document your development process with **minimum 3 entries** showing progression
 
 **Your Answer**:
 
-[Your answer here - explain your implementation choices]
+[By limiting the number of threads that can access a crucial portion at once, ReentrantLock ensures mutual exclusion. It was employed in this assignment to safeguard the execution log and shared counters. Semaphore, on the other hand, restricts access to a finite resource by granting a set number of permits. To simulate CPU access and make sure that only one process runs at a time, I utilized a binary semaphore with one permit. Semaphores regulate resource access, whereas locks safeguard data consistency.]
 
 ---
 
@@ -124,7 +125,7 @@ Document your development process with **minimum 3 entries** showing progression
 
 **Your Answer**:
 
-[Your answer here - reference try-finally blocks, lock ordering, etc.]
+[When several threads are stalled indefinitely while waiting for resources held by others, this is known as a deadlock. Using try-finally blocks to guarantee that locks are always released is one preventative strategy. Keeping a constant lock acquisition sequence or avoiding nested locks are two other strategies. In order to guarantee that resources are always released and avoid deadlocks, I implemented try-finally blocks for both locks and semaphores in my code..]
 
 ---
 
@@ -137,7 +138,7 @@ Document your development process with **minimum 3 entries** showing progression
 
 **Your Answer**:
 
-[Your answer here - explain coarse-grained vs fine-grained locking, independence of counters, concurrency implications. Show understanding of when to use each approach. 5-8 sentences expected.]
+[I employed a coarse-grained locking strategy by using a single lock for each of the three counters. This guarantees consistency across related modifications and streamlines implementation. But because only one thread can update any counter at a time, it lowers concurrency. Because independent variables can be accessed concurrently, fine-grained locking, in which each counter has its own lock, would enable increased concurrency. Fine-grained locking works better because the counters are independent, but I went with coarse-grained locking for accuracy and simplicity..]
 
 ---
 
