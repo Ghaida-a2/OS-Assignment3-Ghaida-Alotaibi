@@ -147,52 +147,67 @@ Second, several threads concurrently access the executionLog ArrayList. Concurre
 ### Critical Section #1: Counter Variables
 
 **Which variables**: 
-
+contextSwitchCount, completedProcessCount, totalWaitingTime
 **Why they need protection**: 
-
+They are updated simultaneously and shared across threads.
 **Synchronization mechanism used**: 
-
+ReentrantLock
 **Code snippet**:
 ```java
 // Paste your implementation here
+lock.lock();
+try {
+    contextSwitchCount++;
+} finally {
+    lock.unlock();
+}
 ```
 
 **Justification**: 
-
+Ensures mutual exclusion and prevents race conditions.
 ---
 
 ### Critical Section #2: Execution Log
 
 **What resource**: 
-
+executionLog (ArrayList)
 **Why it needs protection**: 
-
+ArrayList is not thread-safe and concurrent access may cause inconsistencies
 **Synchronization mechanism used**: 
-
+ReentrantLock
 **Code snippet**:
 ```java
 // Paste your implementation here
+lock.lock();
+try {
+    executionLog.add(message);
+} finally {
+    lock.unlock();
+}
 ```
 
 **Justification**: 
-
+Prevents concurrent modification issues.
 ---
 
 ### Critical Section #3: CPU Semaphore
 
 **Purpose of semaphore**: 
-
+Control access to CPU resource
 **Number of permits and why**: 
-
+1 permit to allow only one process at a time
 **Where implemented**: 
-
+Inside run() and runToCompletion()
 **Code snippet**:
 ```java
 // Paste your implementation here
+SharedResources.cpuSemaphore.acquire();
+...
+SharedResources.cpuSemaphore.release();
 ```
 
 **Effect on program behavior**: 
-
+Ensures sequential CPU execution and prevents overlap.
 ---
 
 ## Part 4: Testing and Verification (2 marks)
